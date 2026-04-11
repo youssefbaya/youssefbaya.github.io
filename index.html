@@ -754,11 +754,11 @@ function playClick() {
     filter.frequency.value = 2200;
 
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(520, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.08);
+    osc.frequency.setValueAtTime(340, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.15);
 
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.10, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
 
     osc.connect(filter);
     filter.connect(gain);
@@ -767,17 +767,11 @@ function playClick() {
     osc.stop(ctx.currentTime + 0.13);
 
     // subtle harmonic layer
-    const osc2 = ctx.createOscillator();
-    const gain2 = ctx.createGain();
-    osc2.type = 'triangle';
-    osc2.frequency.setValueAtTime(1040, ctx.currentTime);
-    osc2.frequency.exponentialRampToValueAtTime(640, ctx.currentTime + 0.06);
-    gain2.gain.setValueAtTime(0.06, ctx.currentTime);
-    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-    osc2.connect(gain2);
-    gain2.connect(ctx.destination);
-    osc2.start(ctx.currentTime);
-    osc2.stop(ctx.currentTime + 0.09);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(680, ctx.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.12);
+    gain2.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
   } catch(e) {}
 }
 
