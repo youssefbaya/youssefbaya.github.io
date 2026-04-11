@@ -244,10 +244,10 @@ nav::after {
 .ob2 { right: -20px; top: 50%; transform: translateY(-50%); }
 .ob3 { bottom: -10px; left: 50%; transform: translateX(-50%); }
 .ob4 { left: -20px; top: 50%; transform: translateY(-50%); }
-.ob5 { top: 18%; right: -60px; animation: float1 5.2s ease-in-out infinite; }
+.ob5 { top: 18%; right: -70px; animation: float1 5.2s ease-in-out infinite; }
 .ob6 { bottom: 18%; left: 10px; animation: float3 4.2s ease-in-out infinite; }
 .ob7 { top: 18%; left: -10px; }
-.ob8 { bottom: 28%; right: -60px; animation: float4 4.8s ease-in-out infinite; }
+.ob8 { bottom: 18%; right: -60px; animation: float4 4.8s ease-in-out infinite; }
 
 /* scrolling tech strip */
 .marquee-wrap {
@@ -446,6 +446,35 @@ footer {
   box-shadow: 0 0 20px rgba(74,143,232,0.15);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+.typed-cursor {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.footer-socials {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.footer-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--grey);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: all 0.2s;
+  cursor: none;
+}
+.footer-icon svg { width: 14px; height: 14px; }
+.footer-icon:hover { color: var(--accent); border-color: var(--accent-s); background: var(--accent-g); }
+
+
 </style>
 </head>
 <body>
@@ -487,7 +516,7 @@ footer {
 
 <section id="hero">
   <div class="hero-left">
-    <span class="hero-tag">Available for graduate roles · Hull, UK</span>
+    <span class="hero-tag"><span id="typed-text"></span><span class="typed-cursor">|</span></span>
     <h1 class="hero-h1">
       Youssef
       <span class="outline">Baya</span>
@@ -702,6 +731,17 @@ footer {
 
 <footer>
   <p class="footer-l">Designed & built by <span>Youssef Baya</span></p>
+  <div class="footer-socials">
+    <a href="https://github.com/youssefbaya" target="_blank" class="footer-icon" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    </a>
+    <a href="https://linkedin.com/in/youssefbaya" target="_blank" class="footer-icon" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="bayayoussefpro@gmail.com" class="footer-icon" aria-label="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    </a>
+  </div>
   <p class="footer-r">Hull · England · 2025</p>
 </footer>
 
@@ -927,6 +967,41 @@ document.querySelectorAll('.orbit-badge').forEach(badge => {
     if (targetRing) targetRing.classList.remove('glowing');
   });
 });
+
+// typing animation on hero tag
+const typedEl = document.getElementById('typed-text');
+const typedString = 'Available for graduate roles · Hull, UK';
+let typedIndex = 0;
+let isDeleting = false;
+
+function typeLoop() {
+  if (!isDeleting && typedIndex <= typedString.length) {
+    typedEl.textContent = typedString.slice(0, typedIndex);
+    typedIndex++;
+    if (typedIndex > typedString.length) {
+      setTimeout(() => { isDeleting = true; typeLoop(); }, 2000);
+      return;
+    }
+    setTimeout(typeLoop, 55);
+  } else if (isDeleting && typedIndex >= 0) {
+    typedEl.textContent = typedString.slice(0, typedIndex);
+    typedIndex--;
+    if (typedIndex < 0) {
+       document.querySelector('.typed-cursor').style.opacity = '0';
+       setTimeout(() => {
+          isDeleting = false;
+          typedIndex = 0;
+          document.querySelector('.typed-cursor').style.opacity = '1';
+      typeLoop();
+     }, 500);
+     return;
+}
+    setTimeout(typeLoop, 30);
+  }
+}
+setTimeout(typeLoop, 800);
+
+
 </script>
 </body>
 </html>
