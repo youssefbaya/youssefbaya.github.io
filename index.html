@@ -70,9 +70,10 @@ body::after {
   transition: background 0.4s ease;
 }
 html.light body::after {
-  background: radial-gradient(ellipse 65% 55% at 68% 38%, rgba(47,107,196,0.05) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 35%, rgba(180,140,90,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(47,107,196,0.07) 0%, transparent 55%);
 }
-
 /* cursor dot */
 #c-dot {
   width: 9px; height: 9px;
@@ -771,8 +772,8 @@ const audioLight = document.getElementById('audio-light');
 const audioDark  = document.getElementById('audio-dark');
 let musicPlaying = false;
 
-audioLight.volume = 0.35;
-audioDark.volume  = 0.35;
+audioLight.volume = 0.15;
+audioDark.volume  = 0.15;
 
 function getActiveAudio() {
   return document.documentElement.classList.contains('light') ? audioLight : audioDark;
