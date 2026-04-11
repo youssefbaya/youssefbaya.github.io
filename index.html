@@ -10,6 +10,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
+/* dark mode (default variables, applied when html has no .light class) */
 :root {
   --bg:        #080810;
   --surface:   #0d0d1a;
@@ -28,10 +29,11 @@ html { scroll-behavior: smooth; }
   transition: background 0.3s, color 0.3s;
 }
 
+/* beige / light mode */
 html.light {
-  --bg:        #f2f2ee;
-  --surface:   #e8e8e3;
-  --surface2:  #dededа;
+  --bg:        #f5f0e8;
+  --surface:   #ede8df;
+  --surface2:  #e4ddd2;
   --line:      rgba(0,0,0,0.08);
   --accent:    #2f6bc4;
   --accent-s:  #1a4f9e;
@@ -51,7 +53,7 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* ── GRAIN TEXTURE ── */
+/* grain texture overlay */
 body::before {
   content: '';
   position: fixed; inset: 0;
@@ -60,7 +62,8 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
 }
-/* ── SUBTLE RADIAL GLOW ── */
+
+/* radial accent glow behind hero area */
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -68,10 +71,10 @@ body::after {
   background: radial-gradient(ellipse 65% 55% at 68% 38%, rgba(74,143,232,0.06) 0%, transparent 70%);
 }
 html.light body::after {
-  background: radial-gradient(ellipse 65% 55% at 68% 38%, rgba(47,107,196,0.04) 0%, transparent 70%);
+  background: radial-gradient(ellipse 65% 55% at 68% 38%, rgba(47,107,196,0.05) 0%, transparent 70%);
 }
 
-/* ── CURSOR DOT ── */
+/* cursor main dot */
 #c-dot {
   width: 9px; height: 9px;
   background: var(--accent);
@@ -90,8 +93,9 @@ html.light body::after {
   border: 1.5px solid var(--accent);
   box-shadow: 0 0 18px rgba(74,143,232,0.25);
 }
+
+/* cursor trail dots */
 .c-trail {
-  width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--accent);
   position: fixed;
@@ -100,9 +104,10 @@ html.light body::after {
   transform: translate(-50%,-50%);
   transition: opacity 0.5s ease;
 }
+
 @media (hover: none) { #c-dot, .c-trail { display: none; } body { cursor: auto; } }
 
-/* ── MUSIC & THEME BUTTONS ── */
+/* nav icon buttons (music + theme) */
 .nav-icon-btn {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -110,17 +115,21 @@ html.light body::after {
   background: var(--surface);
   color: var(--grey);
   display: flex; align-items: center; justify-content: center;
-  cursor: none;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  outline: none; padding: 0;
+  cursor: none; transition: all 0.2s;
+  flex-shrink: 0; outline: none; padding: 0;
   position: relative;
 }
 .nav-icon-btn:hover { border-color: var(--accent-s); color: var(--accent); background: var(--accent-g); }
 .nav-icon-btn svg { width: 15px; height: 15px; transition: transform 0.35s ease; }
 .nav-icon-btn:hover svg { transform: rotate(15deg); }
 
-/* music playing pulse ring */
+/* music icon glows with accent colour when playing */
+.nav-icon-btn.playing #icon-music-on {
+  stroke: var(--accent);
+  filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 10px var(--accent));
+}
+
+/* pulsing ring around music button when playing */
 .nav-icon-btn.playing::after {
   content: '';
   position: absolute; inset: -4px;
@@ -134,21 +143,20 @@ html.light body::after {
   100% { transform: scale(1.4); opacity: 0; }
 }
 
+/* theme icon swap */
 .icon-sun  { display: none; }
 .icon-moon { display: block; }
 html.light .icon-sun  { display: block; }
 html.light .icon-moon { display: none; }
 
-/* ── NAV ── */
+/* nav */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
-  z-index: 200;
-  padding: 1.8rem 4rem;
+  z-index: 200; padding: 1.8rem 4rem;
   display: flex; align-items: center; justify-content: space-between;
 }
 nav::after {
-  content: '';
-  position: absolute; bottom: 0; left: 4rem; right: 4rem;
+  content: ''; position: absolute; bottom: 0; left: 4rem; right: 4rem;
   height: 1px; background: var(--line);
 }
 .nav-logo {
@@ -176,10 +184,9 @@ nav::after {
 }
 .nav-cta:hover { background: var(--accent-g); }
 
-/* ── HERO ── */
+/* hero */
 #hero {
-  position: relative; z-index: 1;
-  min-height: 100vh;
+  position: relative; z-index: 1; min-height: 100vh;
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: center; padding: 0 4rem; gap: 4rem; padding-top: 6rem;
 }
@@ -207,10 +214,7 @@ nav::after {
   opacity: 0; animation: rise 0.9s ease forwards 0.45s;
 }
 .hero-p strong { color: var(--white); font-weight: 500; }
-.hero-actions {
-  display: flex; gap: 1rem;
-  opacity: 0; animation: rise 0.9s ease forwards 0.6s;
-}
+.hero-actions { display: flex; gap: 1rem; opacity: 0; animation: rise 0.9s ease forwards 0.6s; }
 .btn-fill {
   font-family: var(--body); font-size: 13px; font-weight: 500;
   padding: 13px 28px; background: var(--accent); color: #fff;
@@ -225,7 +229,7 @@ nav::after {
 }
 .btn-line:hover { border-color: var(--grey2); color: var(--white); }
 
-/* hero ring */
+/* hero ring graphic */
 .hero-right {
   position: relative; display: flex; align-items: center; justify-content: center;
   opacity: 0; animation: rise 1s ease forwards 0.7s;
@@ -258,7 +262,7 @@ nav::after {
 .ob3 { bottom: -10px; left: 50%; transform: translateX(-50%); }
 .ob4 { left: -20px; top: 50%; transform: translateY(-50%); }
 
-/* ── MARQUEE ── */
+/* scrolling tech marquee */
 .marquee-wrap {
   position: relative; z-index: 1;
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
@@ -273,7 +277,7 @@ nav::after {
 .marquee-item::after { content: '·'; color: var(--accent); font-size: 1.2rem; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
-/* ── SECTIONS ── */
+/* shared section styles */
 .section { position: relative; z-index: 1; padding: 7rem 4rem; border-top: 1px solid var(--line); }
 .s-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
 .s-num { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.2em; }
@@ -284,7 +288,7 @@ nav::after {
 }
 .s-title em { font-style: normal; -webkit-text-stroke: 1px var(--accent); color: transparent; }
 
-/* ── ABOUT ── */
+/* about section */
 .about-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 6rem; align-items: start; }
 .about-body { display: flex; flex-direction: column; gap: 1.2rem; }
 .about-body p { font-size: 0.93rem; line-height: 1.85; color: var(--grey); }
@@ -308,7 +312,7 @@ nav::after {
 }
 .pill:hover { border-color: var(--accent-s); color: var(--accent); background: var(--accent-g2); }
 
-/* ── PROJECTS ── */
+/* projects section */
 .projects-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1px; background: var(--line);
@@ -337,7 +341,7 @@ nav::after {
   text-transform: uppercase; padding: 3px 8px; border-radius: 2px;
 }
 .proj-status.live  { color: #4ade80; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); }
-.proj-status.wip   { color: #fbbf24; background: rgba(251,191,36,0.08);  border: 1px solid rgba(251,191,36,0.2); }
+.proj-status.wip   { color: #fbbf24; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); }
 .proj-status.done  { color: var(--accent); background: var(--accent-g2); border: 1px solid var(--accent-s); }
 .proj-name { font-family: var(--head); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
 .proj-desc { font-size: 0.83rem; line-height: 1.7; color: var(--grey); flex: 1; }
@@ -355,7 +359,7 @@ nav::after {
 }
 .proj-link:hover { color: var(--accent); }
 
-/* ── CONTACT ── */
+/* contact section */
 .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
 .contact-big {
   font-family: var(--head); font-size: clamp(3rem, 5vw, 5.5rem);
@@ -381,7 +385,7 @@ nav::after {
 .contact-arrow { margin-left: auto; color: var(--grey); font-size: 18px; transition: all 0.2s; }
 .contact-item:hover .contact-arrow { transform: translate(3px,-3px); color: var(--accent); }
 
-/* ── FOOTER ── */
+/* footer */
 footer {
   position: relative; z-index: 1; border-top: 1px solid var(--line);
   padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-between;
@@ -390,17 +394,16 @@ footer {
 .footer-l span { color: var(--accent); }
 .footer-r { font-family: var(--mono); font-size: 10px; color: var(--grey2); letter-spacing: 0.12em; text-transform: uppercase; }
 
-/* ── SCROLL REVEAL ── */
+/* scroll reveal */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.in { opacity: 1; transform: none; }
 
-/* ── KEYFRAMES ── */
 @keyframes rise {
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── RESPONSIVE ── */
+/* responsive */
 @media (max-width: 900px) {
   nav { padding: 1.4rem 2rem; }
   nav::after { left: 2rem; right: 2rem; }
@@ -420,10 +423,8 @@ footer {
 </head>
 <body>
 
-<!-- CURSOR -->
 <div id="c-dot"></div>
 
-<!-- NAV -->
 <nav>
   <a class="nav-logo" href="#hero">youssef baya</a>
   <div class="nav-right">
@@ -432,8 +433,7 @@ footer {
     <a class="nav-link" href="#contact">Contact</a>
     <a class="nav-cta" href="#" target="_blank">Resume ↗</a>
 
-    <!-- Music button -->
-    <button class="nav-icon-btn" id="musicBtn" aria-label="Toggle music" title="Toggle background music">
+    <button class="nav-icon-btn" id="musicBtn" aria-label="Toggle music">
       <svg id="icon-music-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none">
         <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
       </svg>
@@ -443,8 +443,7 @@ footer {
       </svg>
     </button>
 
-    <!-- Theme button -->
-    <button class="nav-icon-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle light/dark mode">
+    <button class="nav-icon-btn" id="themeBtn" aria-label="Toggle theme">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
@@ -459,7 +458,6 @@ footer {
   </div>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <div class="hero-left">
     <span class="hero-tag">Available for graduate roles · Hull, UK</span>
@@ -496,7 +494,6 @@ footer {
   </div>
 </section>
 
-<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
     <span class="marquee-item">React</span><span class="marquee-item">Python</span>
@@ -516,7 +513,6 @@ footer {
   </div>
 </div>
 
-<!-- ABOUT -->
 <section id="about" class="section">
   <div class="s-eyebrow reveal"><span class="s-num">01</span><span class="s-bar"></span></div>
   <h2 class="s-title reveal">Who I <em>am</em></h2>
@@ -574,7 +570,6 @@ footer {
   </div>
 </section>
 
-<!-- PROJECTS -->
 <section id="projects" class="section">
   <div class="s-eyebrow reveal"><span class="s-num">02</span><span class="s-bar"></span></div>
   <h2 class="s-title reveal">What I've <em>built</em></h2>
@@ -632,7 +627,6 @@ footer {
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact" class="section">
   <div class="contact-layout">
     <div class="contact-left reveal">
@@ -674,26 +668,21 @@ footer {
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p class="footer-l">Designed & built by <span>Youssef Baya</span></p>
   <p class="footer-r">Hull · England · 2025</p>
 </footer>
 
-<!-- AUDIO (put your music.mp3 in the same folder as this file) -->
 <audio id="bg-audio" loop preload="none">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// ══════════════════════════════════════════
-//  CURSOR + TRAIL
-// ══════════════════════════════════════════
+// cursor trail setup
 const dot = document.getElementById('c-dot');
 const TRAIL_COUNT = 10;
 const trail = [];
 
-// build trail dots
 for (let i = 0; i < TRAIL_COUNT; i++) {
   const d = document.createElement('div');
   d.className = 'c-trail';
@@ -701,7 +690,7 @@ for (let i = 0; i < TRAIL_COUNT; i++) {
   d.style.height = (5 - i * 0.3) + 'px';
   d.style.opacity = '0';
   document.body.appendChild(d);
-  trail.push({ el: d, x: -40, y: -40 });
+  trail.push(d);
 }
 
 let mx = -40, my = -40;
@@ -714,27 +703,22 @@ document.addEventListener('mousemove', e => {
 }, { passive: true });
 
 function animateTrail() {
-  // shift trail positions
   trailPoints = [{ x: mx, y: my }, ...trailPoints.slice(0, TRAIL_COUNT - 1)];
-  trail.forEach((t, i) => {
-    const p = trailPoints[i];
-    t.el.style.left    = p.x + 'px';
-    t.el.style.top     = p.y + 'px';
-    t.el.style.opacity = (1 - i / TRAIL_COUNT) * 0.5 + '';
+  trail.forEach((el, i) => {
+    el.style.left    = trailPoints[i].x + 'px';
+    el.style.top     = trailPoints[i].y + 'px';
+    el.style.opacity = (1 - i / TRAIL_COUNT) * 0.45 + '';
   });
   requestAnimationFrame(animateTrail);
 }
 animateTrail();
 
-// hover effect on interactive elements
 document.querySelectorAll('a, button, .pill, .proj-card').forEach(el => {
   el.addEventListener('mouseenter', () => dot.classList.add('hovering'));
   el.addEventListener('mouseleave', () => dot.classList.remove('hovering'));
 });
 
-// ══════════════════════════════════════════
-//  CLICK SOUND — warm techy tap via Web Audio
-// ══════════════════════════════════════════
+// click sound (plays only on buttons and links)
 let audioCtx = null;
 
 function initAudio() {
@@ -745,41 +729,42 @@ function initAudio() {
 function playClick() {
   try {
     const ctx = initAudio();
-    // main tone — soft sine with slight pitch sweep
+
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
-
     filter.type = 'lowpass';
     filter.frequency.value = 2200;
-
     osc.type = 'sine';
     osc.frequency.setValueAtTime(340, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.15);
-
     gain.gain.setValueAtTime(0.10, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
-
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(ctx.destination);
     osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.13);
+    osc.stop(ctx.currentTime + 0.23);
 
-    // subtle harmonic layer
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
     osc2.type = 'sine';
     osc2.frequency.setValueAtTime(680, ctx.currentTime);
     osc2.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.12);
     gain2.gain.setValueAtTime(0.04, ctx.currentTime);
     gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(ctx.currentTime);
+    osc2.stop(ctx.currentTime + 0.19);
   } catch(e) {}
 }
 
-document.addEventListener('click', playClick);
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('click', playClick);
+});
 
-// ══════════════════════════════════════════
-//  BACKGROUND MUSIC
-// ══════════════════════════════════════════
+// background music toggle
 const musicBtn   = document.getElementById('musicBtn');
 const iconOn     = document.getElementById('icon-music-on');
 const iconOff    = document.getElementById('icon-music-off');
@@ -801,27 +786,24 @@ musicBtn.addEventListener('click', () => {
       musicBtn.classList.add('playing');
       iconOn.style.display  = 'block';
       iconOff.style.display = 'none';
-    }).catch(() => {
-      // autoplay blocked — user must interact first, which they already did
-      bgAudio.play();
-    });
+    }).catch(() => {});
   }
 });
 
-// ══════════════════════════════════════════
-//  THEME TOGGLE
-// ══════════════════════════════════════════
+// theme toggle — beige/light is the default, dark is the opt-in
 const themeBtn = document.getElementById('themeBtn');
 const htmlEl   = document.documentElement;
-if (localStorage.getItem('theme') === 'light') htmlEl.classList.add('light');
+
+if (localStorage.getItem('theme') !== 'dark') {
+  htmlEl.classList.add('light');
+}
+
 themeBtn.addEventListener('click', () => {
   htmlEl.classList.toggle('light');
   localStorage.setItem('theme', htmlEl.classList.contains('light') ? 'light' : 'dark');
 });
 
-// ══════════════════════════════════════════
-//  SCROLL REVEAL
-// ══════════════════════════════════════════
+// scroll reveal
 setTimeout(() => {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
 }, 2000);
@@ -841,9 +823,7 @@ if ('IntersectionObserver' in window) {
   });
 }
 
-// ══════════════════════════════════════════
-//  ACTIVE NAV
-// ══════════════════════════════════════════
+// highlight active nav link on scroll
 const navSections = document.querySelectorAll('section[id]');
 const navLinks    = document.querySelectorAll('.nav-link');
 window.addEventListener('scroll', () => {
