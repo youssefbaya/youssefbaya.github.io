@@ -403,6 +403,49 @@ footer {
   body { cursor: auto; }
   #c-dot, .c-trail { display: none; }
 }
+
+/* badge float animation */
+.orbit-badge {
+  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.orbit-badge.lit {
+  color: var(--accent);
+  border-color: var(--accent-s);
+  background: var(--accent-g);
+  box-shadow: 0 0 12px rgba(74,143,232,0.2);
+}
+.ob1 { animation: float1 4s ease-in-out infinite; }
+.ob2 { animation: float2 5s ease-in-out infinite; }
+.ob3 { animation: float3 4.5s ease-in-out infinite; }
+.ob4 { animation: float4 3.8s ease-in-out infinite; }
+.ob5 { animation: float1 5.2s ease-in-out infinite; }
+.ob6 { animation: float3 4.2s ease-in-out infinite; }
+.ob7 { animation: float2 3.6s ease-in-out infinite; }
+.ob8 { animation: float4 4.8s ease-in-out infinite; }
+
+@keyframes float1 {
+  0%, 100% { transform: translateX(-50%) translateY(0px); }
+  50%       { transform: translateX(-50%) translateY(-6px); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translateY(-50%) translateX(0px); }
+  50%       { transform: translateY(-50%) translateX(5px); }
+}
+@keyframes float3 {
+  0%, 100% { transform: translateX(-50%) translateY(0px); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+@keyframes float4 {
+  0%, 100% { transform: translateY(-50%) translateX(0px); }
+  50%       { transform: translateY(-50%) translateX(-5px); }
+}
+
+/* ring glow on badge hover */
+.ring-wrap .ring.glowing {
+  border-color: rgba(74,143,232,0.5);
+  box-shadow: 0 0 20px rgba(74,143,232,0.15);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
 </style>
 </head>
 <body>
@@ -461,25 +504,25 @@ footer {
     </div>
   </div>
  <div class="hero-right">
-    <div class="ring-wrap">
-      <div class="ring ring-1"><div class="ring-dot"></div></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-3"></div>
-      <div class="ring-core">
-        <span class="ring-core-label">BSc</span>
-        <span class="ring-core-val">CS</span>
-        <span class="ring-core-label">Hull · 2025</span>
-      </div>
-      <span class="orbit-badge ob1">Full Stack</span>
-      <span class="orbit-badge ob2">AI / ML</span>
-      <span class="orbit-badge ob3">Game Dev</span>
-      <span class="orbit-badge ob4">Systems</span>
-      <span class="orbit-badge ob5">Computer Vision</span>
-      <span class="orbit-badge ob6">Databases</span>
-      <span class="orbit-badge ob7">Algorithms</span>
-      <span class="orbit-badge ob8">Parallel Computing</span>
+  <div class="ring-wrap" id="ringWrap">
+    <div class="ring ring-1"><div class="ring-dot"></div></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="ring-core">
+      <span class="ring-core-label">BSc</span>
+      <span class="ring-core-val">CS</span>
+      <span class="ring-core-label">Hull · 2025</span>
     </div>
+    <span class="orbit-badge ob1" data-ring="1">Full Stack</span>
+    <span class="orbit-badge ob2" data-ring="2">AI / ML</span>
+    <span class="orbit-badge ob3" data-ring="1">Game Dev</span>
+    <span class="orbit-badge ob4" data-ring="2">Systems</span>
+    <span class="orbit-badge ob5" data-ring="3">Computer Vision</span>
+    <span class="orbit-badge ob6" data-ring="3">Databases</span>
+    <span class="orbit-badge ob7" data-ring="1">Algorithms</span>
+    <span class="orbit-badge ob8" data-ring="2">Parallel Computing</span>
   </div>
+</div>
 </section>
 
 <div class="marquee-wrap">
@@ -856,6 +899,34 @@ window.addEventListener('scroll', () => {
   navSections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
   navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--white)' : ''; });
 }, { passive: true });
+
+// ring parallax on mouse move
+const ringWrap = document.getElementById('ringWrap');
+if (ringWrap) {
+  document.addEventListener('mousemove', e => {
+    const rect = ringWrap.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / window.innerWidth;
+    const dy = (e.clientY - cy) / window.innerHeight;
+    ringWrap.style.transform = `perspective(600px) rotateY(${dx * 12}deg) rotateX(${-dy * 12}deg)`;
+  }, { passive: true });
+}
+
+// badge hover lights up badge + nearest ring
+document.querySelectorAll('.orbit-badge').forEach(badge => {
+  const ringNum = badge.getAttribute('data-ring');
+  const targetRing = document.querySelector(`.ring-${ringNum}`);
+
+  badge.addEventListener('mouseenter', () => {
+    badge.classList.add('lit');
+    if (targetRing) targetRing.classList.add('glowing');
+  });
+  badge.addEventListener('mouseleave', () => {
+    badge.classList.remove('lit');
+    if (targetRing) targetRing.classList.remove('glowing');
+  });
+});
 </script>
 </body>
 </html>
