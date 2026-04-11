@@ -259,16 +259,7 @@ nav::after {
   display: inline-block;
   transition: transform 0.1s ease, color 0.1s ease;
 }
-.name-tooltip {
-  position: absolute;
-  bottom: -1.8rem; left: 0;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
-  color: var(--accent);
-  opacity: 0; transform: translateY(6px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  white-space: nowrap; pointer-events: none;
-}
-#wobble-name:hover .name-tooltip { opacity: 1; transform: translateY(0); }
+
 
 .name-particle {
   position: absolute; width: 4px; height: 4px;
@@ -692,8 +683,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--grey2) var(--bg); }
   <div class="hero-left">
     <span class="hero-tag"><span id="typed-text"></span><span class="typed-cursor">|</span></span>
     <h1 class="hero-h1">
-      <span id="wobble-name"><span class="name-letter">Y</span><span class="name-letter">o</span><span class="name-letter">u</span><span class="name-letter">s</span><span class="name-letter">s</span><span class="name-letter">e</span><span class="name-letter">f</span><span class="name-tooltip">yeah that's me 👋</span></span>
-      <span class="outline">Baya</span>
+      <span id="wobble-name"><span class="name-letter">Y</span><span class="name-letter">o</span><span class="name-letter">u</span><span class="name-letter">s</span><span class="name-letter">s</span><span class="name-letter">e</span><span class="name-letter">f</span></span>
+      <span class="outline" id="baya-name">Baya</span>
       <span class="sub">Computer Science · Final Year</span>
     </h1>
     <p class="hero-p">
@@ -1424,6 +1415,21 @@ function triggerKonami() {
     document.body.style.transform = '';
     msg.remove();
   }, 4000);
+}
+
+const bayaName = document.getElementById('baya-name');
+if (bayaName) {
+  bayaName.addEventListener('mousemove', e => {
+    const rect = bayaName.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    bayaName.style.transform = `perspective(400px) rotateY(${x * 20}deg) rotateX(${-y * 20}deg) scale(1.05)`;
+    bayaName.style.transition = 'transform 0.1s ease';
+  });
+  bayaName.addEventListener('mouseleave', () => {
+    bayaName.style.transform = 'perspective(400px) rotateY(0deg) rotateX(0deg) scale(1)';
+    bayaName.style.transition = 'transform 0.4s ease';
+  });
 }
 </script>
 </body>
