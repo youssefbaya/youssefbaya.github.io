@@ -31,9 +31,9 @@ html { scroll-behavior: smooth; }
 
 /* beige / light mode */
 html.light {
-  --bg:        #f5f0e8;
-  --surface:   #ede8df;
-  --surface2:  #e4ddd2;
+  --bg:        #f7f2e5;
+  --surface:   #efe9d8;
+  --surface2:  #e7e0cb;
   --line:      rgba(0,0,0,0.08);
   --accent:    #2f6bc4;
   --accent-s:  #1a4f9e;
@@ -729,34 +729,57 @@ function initAudio() {
 function playClick() {
   try {
     const ctx = initAudio();
+    const isLight = document.documentElement.classList.contains('light');
 
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 2200;
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(340, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.10, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.23);
+    if (isLight) {
+      // creamy warm tone for light mode
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 1200;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(280, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.09, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.29);
+    } else {
+      // techy sharper tone for dark mode
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 2000;
+      filter.Q.value = 2;
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.13, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
 
-    const osc2 = ctx.createOscillator();
-    const gain2 = ctx.createGain();
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(680, ctx.currentTime);
-    osc2.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.12);
-    gain2.gain.setValueAtTime(0.04, ctx.currentTime);
-    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-    osc2.connect(gain2);
-    gain2.connect(ctx.destination);
-    osc2.start(ctx.currentTime);
-    osc2.stop(ctx.currentTime + 0.19);
+      // small harmonic on top
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1200, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.08);
+      gain2.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime);
+      osc2.stop(ctx.currentTime + 0.11);
+    }
   } catch(e) {}
 }
 
