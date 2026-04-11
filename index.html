@@ -169,7 +169,7 @@ nav::after {
 
 /* hero */
 #hero {
-  position: relative; z-index: 1; min-height: 100vh;
+  position: relative; z-index: 1; min-height: 80vh;
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: center; padding: 0 4rem; gap: 4rem; padding-top: 6rem;
 }
@@ -474,12 +474,252 @@ footer {
 .footer-icon svg { width: 14px; height: 14px; }
 .footer-icon:hover { color: var(--accent); border-color: var(--accent-s); background: var(--accent-g); }
 
+#scroll-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(74,143,232,0.6);
+}
+
+.proj-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+.tl-item {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  position: relative;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-marker {
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2px solid var(--accent-s);
+  margin-top: 4px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+.tl-marker.future {
+  border-color: var(--grey2);
+  background: var(--surface);
+}
+.tl-item:hover .tl-marker {
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(74,143,232,0.5);
+}
+.tl-content { display: flex; flex-direction: column; gap: 0.6rem; padding-top: 0; }
+.tl-header { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.tl-year { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: var(--grey); }
+.tl-badge {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 2px;
+  color: var(--accent); background: var(--accent-g2); border: 1px solid var(--accent-s);
+}
+.tl-badge.active {
+  color: #4ade80; background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.3);
+}
+.tl-badge.future {
+  color: var(--grey); background: transparent; border-color: var(--grey2);
+}
+.tl-title {
+  font-family: var(--head); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em;
+}
+.tl-desc { font-size: 0.88rem; line-height: 1.75; color: var(--grey); max-width: 580px; }
+.tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.3rem; }
+.tl-tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  padding: 3px 10px; background: var(--surface2);
+  border: 1px solid var(--line); border-radius: 2px; color: var(--grey2);
+}
+
+#page-loader {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+#page-loader.done { opacity: 0; }
+
+#scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  height: 2px; width: 0%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(74,143,232,0.6);
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+#back-top {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--grey);
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; outline: none;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.2s, color 0.2s, background 0.2s;
+  pointer-events: none;
+}
+#back-top.show {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+#back-top:hover {
+  border-color: var(--accent-s);
+  color: var(--accent);
+  background: var(--accent-g);
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--grey2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.stats-bar {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.stat-item {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 2.5rem 1rem;
+  border-right: 1px solid var(--line);
+  gap: 0.4rem;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--head);
+  font-size: 2.8rem; font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+@media (max-width: 900px) {
+  .stats-bar { flex-wrap: wrap; }
+  .stat-item { flex: 1 1 50%; border-bottom: 1px solid var(--line); }
+}
+
+#wobble-name {
+  display: inline-block;
+  cursor: none;
+  transition: transform 0.1s ease;
+}
+#wobble-name:hover {
+  animation: wobble 0.6s ease;
+}
+@keyframes wobble {
+  0%   { transform: rotate(0deg); }
+  15%  { transform: rotate(-4deg) scale(1.05); }
+  30%  { transform: rotate(4deg) scale(1.05); }
+  45%  { transform: rotate(-3deg); }
+  60%  { transform: rotate(3deg); }
+  75%  { transform: rotate(-1deg); }
+  100% { transform: rotate(0deg); }
+}
+
+#easter-egg {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+#easter-egg.show {
+  opacity: 1; pointer-events: auto;
+}
+#easter-egg-box {
+  background: var(--surface);
+  border: 1px solid var(--accent-s);
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1rem;
+  max-width: 360px;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+#easter-egg.show #easter-egg-box {
+  transform: scale(1);
+}
+.ee-emoji { font-size: 3rem; }
+.ee-title {
+  font-family: var(--head); font-size: 2rem;
+  font-weight: 900; letter-spacing: -0.02em;
+  color: var(--white);
+}
+.ee-sub {
+  font-size: 0.9rem; color: var(--grey); line-height: 1.7;
+}
+.ee-sub a { color: var(--accent); text-decoration: none; }
+.ee-sub a:hover { text-decoration: underline; }
+#ee-close {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 8px 20px;
+  background: transparent; border: 1px solid var(--line);
+  color: var(--grey); border-radius: 3px;
+  cursor: none; transition: all 0.2s; margin-top: 0.5rem;
+}
+#ee-close:hover { border-color: var(--accent-s); color: var(--accent); }
 
 </style>
 </head>
 <body>
 
+<div id="page-loader"></div>
+<div id="scroll-bar"></div>
 <div id="c-dot"></div>
+<div id="scroll-progress"></div>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
 
 <nav>
   <a class="nav-logo" href="#hero">youssef baya</a>
@@ -518,9 +758,9 @@ footer {
   <div class="hero-left">
     <span class="hero-tag"><span id="typed-text"></span><span class="typed-cursor">|</span></span>
     <h1 class="hero-h1">
-      Youssef
-      <span class="outline">Baya</span>
-      <span class="sub">Computer Science · Final Year</span>
+       <span id="wobble-name">Youssef</span>
+       <span class="outline">Baya</span>
+       <span class="sub">Computer Science · Final Year</span>
     </h1>
     <p class="hero-p">
       I build <strong>>full stack applications</strong> and explore </strong>intelligent systems</strong>. 
@@ -553,6 +793,25 @@ footer {
   </div>
 </div>
 </section>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num" data-target="3">0</span>
+    <span class="stat-label">Years of study</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="10">0</span>
+    <span class="stat-label">Modules completed</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="3">0</span>
+    <span class="stat-label">Projects</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="5">0</span>
+    <span class="stat-label">Languages</span>
+  </div>
+</div>
 
 <div class="marquee-wrap">
   <div class="marquee-track">
@@ -602,6 +861,10 @@ footer {
           <span>Next step</span>
           <span class="status-val">MSc · 2026</span>
         </div>
+        <div class="status-row">
+          <span>Fun fact</span>
+          <span class="status-val" id="fun-fact">loading...</span>
+          </div>
       </div>
       <div class="skill-block">
         <p class="skill-label">Languages</p>
@@ -628,6 +891,89 @@ footer {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="timeline" class="section">
+  <div class="s-eyebrow reveal"><span class="s-num">02</span><span class="s-bar"></span></div>
+  <h2 class="s-title reveal">My <em>journey</em></h2>
+  <div class="timeline">
+
+    <div class="tl-item reveal">
+      <div class="tl-marker"></div>
+      <div class="tl-content">
+        <div class="tl-header">
+          <span class="tl-year">2023 — 2024</span>
+          <span class="tl-badge">Year 1</span>
+        </div>
+        <h3 class="tl-title">Foundations</h3>
+        <p class="tl-desc">Built the core fundamentals — programming in C#, computational thinking, algorithms and data structures, and an introduction to operating systems and cloud architecture.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">C#</span>
+          <span class="tl-tag">Algorithms</span>
+          <span class="tl-tag">Data Structures</span>
+          <span class="tl-tag">OS & Cloud</span>
+          <span class="tl-tag">Computational Thinking</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-marker"></div>
+      <div class="tl-content">
+        <div class="tl-header">
+          <span class="tl-year">2024 — 2025</span>
+          <span class="tl-badge">Year 2</span>
+        </div>
+        <h3 class="tl-title">Expanding the stack</h3>
+        <p class="tl-desc">Dived into user interfaces, databases, networks, and artificial intelligence. Started bridging theory with practical full stack skills and real deployment workflows.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">UI / UX</span>
+          <span class="tl-tag">Databases</span>
+          <span class="tl-tag">Networks</span>
+          <span class="tl-tag">Artificial Intelligence</span>
+          <span class="tl-tag">Design & Deploy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-marker"></div>
+      <div class="tl-content">
+        <div class="tl-header">
+          <span class="tl-year">2025 — 2026</span>
+          <span class="tl-badge active">Final Year</span>
+        </div>
+        <h3 class="tl-title">Going deep</h3>
+        <p class="tl-desc">Honours project building a full stack web app in React. Alongside machine learning, computer vision, parallel and concurrent programming, and AI for games using MonoGame.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">React</span>
+          <span class="tl-tag">Machine Learning</span>
+          <span class="tl-tag">Computer Vision</span>
+          <span class="tl-tag">MonoGame</span>
+          <span class="tl-tag">Parallel Computing</span>
+          <span class="tl-tag">Game AI</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-marker future"></div>
+      <div class="tl-content">
+        <div class="tl-header">
+          <span class="tl-year">2026 — 2027</span>
+          <span class="tl-badge future">Next</span>
+        </div>
+        <h3 class="tl-title">Masters</h3>
+        <p class="tl-desc">Starting an MSc in Software Engineering or Artificial Intelligence. The overlap between the two is where I want to be.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">MSc</span>
+          <span class="tl-tag">Software Engineering</span>
+          <span class="tl-tag">AI</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1001,7 +1347,184 @@ function typeLoop() {
 }
 setTimeout(typeLoop, 800);
 
+const scrollBar = document.getElementById('scroll-bar');
+window.addEventListener('scroll', () => {
+  const total = document.body.scrollHeight - window.innerHeight;
+  const pct = (window.scrollY / total) * 100;
+  scrollBar.style.width = pct + '%';
+}, { passive: true });
+
+document.querySelectorAll('.proj-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateY(0deg) rotateX(0deg) scale(1)';
+  });
+});
+
+const loader = document.getElementById('page-loader');
+window.addEventListener('load', () => {
+  setTimeout(() => loader.classList.add('done'), 100);
+});
+
+const scrollProgress = document.getElementById('scroll-progress');
+const backTop = document.getElementById('back-top');
+
+window.addEventListener('scroll', () => {
+  const total = document.body.scrollHeight - window.innerHeight;
+  scrollProgress.style.width = (window.scrollY / total * 100) + '%';
+  if (window.scrollY > 400) {
+    backTop.classList.add('show');
+  } else {
+    backTop.classList.remove('show');
+  }
+}, { passive: true });
+
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-target'));
+  const duration = 1200;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      el.textContent = target + '+';
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(current);
+    }
+  }, 16);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-num').forEach(el => {
+  counterObserver.observe(el);
+});
+
+const originalTitle = document.title;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    document.title = 'come back! 👀';
+  } else {
+    document.title = originalTitle;
+  }
+});
+
+const facts = [
+  'currently debugging something 🐛',
+  'last googled: how to center a div',
+  'probably drank 50 redbulls this week',
+  'currently listening to music',
+  'git commit -m "final final v3"',
+  'has 47 tabs open right now',
+  'got into CS through gaming 🎮',
+  'tennis player off the screen',
+  'mauritanian in hull 🌍',
+  'probably overthinking a side project',
+];
+const factEl = document.getElementById('fun-fact');
+if (factEl) {
+  factEl.textContent = facts[Math.floor(Math.random() * facts.length)];
+}
+
+const konamiCode = [
+  'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+  'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
+  'b','a'
+];
+let konamiIndex = 0;
+
+document.addEventListener('keydown', e => {
+  if (e.key === konamiCode[konamiIndex]) {
+    konamiIndex++;
+    if (konamiIndex === konamiCode.length) {
+      triggerKonami();
+      konamiIndex = 0;
+    }
+  } else {
+    konamiIndex = 0;
+  }
+});
+
+const easterEgg = document.getElementById('easter-egg');
+const eeClose = document.getElementById('ee-close');
+let easterTyped = '';
+
+document.addEventListener('keydown', e => {
+  easterTyped += e.key.toLowerCase();
+  if (easterTyped.length > 6) easterTyped = easterTyped.slice(-6);
+  if (easterTyped === 'hire me') {
+    easterEgg.classList.add('show');
+    easterTyped = '';
+  }
+});
+eeClose.addEventListener('click', () => easterEgg.classList.remove('show'));
+easterEgg.addEventListener('click', e => {
+  if (e.target === easterEgg) easterEgg.classList.remove('show');
+});
+
+function triggerKonami() {
+  const msg = document.createElement('div');
+  msg.style.cssText = `
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: var(--mono); font-size: clamp(1rem, 3vw, 2rem);
+    color: var(--accent); z-index: 99999; pointer-events: none;
+    text-align: center; letter-spacing: 0.1em;
+  `;
+  msg.textContent = '⬆⬆⬇⬇⬅➡⬅➡ 🎮 cheat code activated';
+  document.body.appendChild(msg);
+
+  document.body.style.transition = 'filter 0.3s';
+  document.body.style.filter = 'hue-rotate(180deg) saturate(3) contrast(1.2)';
+
+  let shakeCount = 0;
+  const shakeInterval = setInterval(() => {
+    document.body.style.transform = `translate(${(Math.random()-0.5)*10}px, ${(Math.random()-0.5)*10}px) rotate(${(Math.random()-0.5)*2}deg)`;
+    shakeCount++;
+    if (shakeCount > 20) {
+      clearInterval(shakeInterval);
+      document.body.style.transform = '';
+    }
+  }, 50);
+
+  let hue = 180;
+  const cycleInterval = setInterval(() => {
+    hue = (hue + 15) % 360;
+    document.body.style.filter = `hue-rotate(${hue}deg) saturate(3) contrast(1.2)`;
+  }, 80);
+
+  setTimeout(() => {
+    clearInterval(cycleInterval);
+    document.body.style.filter = '';
+    document.body.style.transform = '';
+    msg.remove();
+  }, 4000);
+}
 
 </script>
+<div id="easter-egg">
+  <div id="easter-egg-box">
+    <p class="ee-emoji">🎉</p>
+    <p class="ee-title">great taste.</p>
+    <p class="ee-sub">seriously though, let's talk —<br><a href="mailto:youremail@email.com">youremail@email.com</a></p>
+    <button id="ee-close">close</button>
+  </div>
+</div>
 </body>
 </html>
